@@ -70,11 +70,13 @@ export async function POST(request: Request) {
             }
 
             // Save AI response (best-effort)
-            await supabase.from('messages').insert({
-              conversation_id: conversationId,
-              role: 'assistant',
-              content: fullText,
-            }).catch(() => {})
+            try {
+              await supabase.from('messages').insert({
+                conversation_id: conversationId,
+                role: 'assistant',
+                content: fullText,
+              })
+            } catch { /* best-effort */ }
 
             // Extract and upsert topics (best-effort)
             try {
