@@ -32,7 +32,7 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conversationId, content }),
+      body: JSON.stringify({ conversationId, content, messages }),
     })
 
     const reader = res.body!.getReader()

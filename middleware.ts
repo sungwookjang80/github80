@@ -5,6 +5,15 @@ export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+  // 데모 모드: demo-user 쿠키가 있으면 인증 통과
+  const isDemoUser = request.cookies.get('demo-user')?.value === 'true'
+  if (isDemoUser) {
+    if (request.nextUrl.pathname === '/login') {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+    return NextResponse.next({ request })
+  }
+
   // Supabase 환경변수 미설정 시 로그인 페이지로 통과
   if (!supabaseUrl || !supabaseKey) {
     const isLoginPage = request.nextUrl.pathname === '/login'

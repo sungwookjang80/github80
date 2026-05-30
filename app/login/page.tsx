@@ -14,6 +14,13 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  async function handleDemoStart() {
+    setLoading(true)
+    await fetch('/api/demo-login', { method: 'POST' })
+    router.push('/')
+    router.refresh()
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -60,6 +67,14 @@ export default function LoginPage() {
           <button onClick={handleSignUp} disabled={loading}
             className="w-full border border-gray-300 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50">
             회원가입
+          </button>
+          <div className="relative my-2">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
+            <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">또는</span></div>
+          </div>
+          <button onClick={handleDemoStart} disabled={loading}
+            className="w-full bg-emerald-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-emerald-600 disabled:opacity-50">
+            데모로 시작하기 (Supabase 없이 체험)
           </button>
         </div>
       </div>

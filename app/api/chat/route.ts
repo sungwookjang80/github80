@@ -1,83 +1,140 @@
-import { createClient } from '@/lib/supabase/server'
-import { createOpenAIClient, buildMessages, TUTOR_SYSTEM_PROMPT } from '@/lib/openai'
+import { createOpenAIClient, TUTOR_SYSTEM_PROMPT } from '@/lib/openai'
 import { extractTopics } from '@/lib/topics'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const cookieStore = await cookies()
+  const isDemo = cookieStore.get('demo-user')?.value === 'true'
+  const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
 
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-  const { conversationId, content } = await request.json()
-
-  if (!conversationId || !content?.trim()) {
-    return NextResponse.json({ error: 'conversationId and content are required' }, { status: 400 })
+  if (!isDemo && !hasSupabase) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  await supabase.from('messages').insert({
-    conversation_id: conversationId,
-    role: 'user',
-    content: content.trim(),
-  })
+  const { conversationId, content, messages: clientMessages } = await request.json()
 
-  const { data: history } = await supabase
-    .from('messages')
-    .select('*')
-    .eq('conversation_id', conversationId)
-    .order('created_at', { ascending: true })
+  if (!content?.trim()) {
+    return NextResponse.json({ error: 'content is required' }, { status: 400 })
+  }
+
+  // Real Supabase mode: persist messages and extract topics
+  if (!isDemo && hasSupabase && conversationId) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      // Save user message
+      await supabase.from('messages').insert({
+        conversation_id: conversationId,
+        role: 'user',
+        content: content.trim(),
+      })
+
+      // Load full history from DB
+      const { data: history } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true })
+
+      const historyMessages = (history || []).slice(-20).map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }))
+
+      const openai = createOpenAIClient()
+      const stream = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        stream: true,
+        messages: [{ role: 'system', content: TUTOR_SYSTEM_PROMPT }, ...historyMessages],
+      })
+
+      const encoder = new TextEncoder()
+      const readable = new ReadableStream({
+        async start(controller) {
+          let fullText = ''
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content || ''
+            if (text) {
+              fullText += text
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
+            }
+          }
+
+          // Save AI response
+          await supabase.from('messages').insert({
+            conversation_id: conversationId,
+            role: 'assistant',
+            content: fullText,
+          })
+
+          // Extract and upsert topics
+          const topics = extractTopics(content + ' ' + fullText)
+          for (const tag of topics) {
+            const { data: existing } = await supabase
+              .from('topics')
+              .select('count')
+              .eq('user_id', user.id)
+              .eq('tag', tag)
+              .single()
+            if (existing) {
+              await supabase.from('topics')
+                .update({ count: existing.count + 1, last_seen_at: new Date().toISOString() })
+                .eq('user_id', user.id).eq('tag', tag)
+            } else {
+              await supabase.from('topics').insert({ user_id: user.id, tag, count: 1, last_seen_at: new Date().toISOString() })
+            }
+          }
+
+          // Update conversation timestamp
+          await supabase.from('conversations')
+            .update({ updated_at: new Date().toISOString() })
+            .eq('id', conversationId)
+
+          controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
+          controller.close()
+        },
+      })
+
+      return new Response(readable, {
+        headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' },
+      })
+    }
+  }
+
+  // Demo mode (or Supabase auth failed): use client-side message history
+  const chatMessages = [
+    ...(clientMessages || []).slice(-20).map((m: { role: string; content: string }) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    })),
+    { role: 'user' as const, content: content.trim() },
+  ]
 
   const openai = createOpenAIClient()
-  const messages = buildMessages(history || [])
-
   const stream = await openai.chat.completions.create({
     model: 'gpt-4o',
     stream: true,
-    messages: [
-      { role: 'system', content: TUTOR_SYSTEM_PROMPT },
-      ...messages,
-    ],
+    messages: [{ role: 'system', content: TUTOR_SYSTEM_PROMPT }, ...chatMessages],
   })
 
   const encoder = new TextEncoder()
   const readable = new ReadableStream({
     async start(controller) {
-      let fullText = ''
-
       for await (const chunk of stream) {
         const text = chunk.choices[0]?.delta?.content || ''
         if (text) {
-          fullText += text
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
         }
       }
-
-      await supabase.from('messages').insert({
-        conversation_id: conversationId,
-        role: 'assistant',
-        content: fullText,
-      })
-
-      const topics = extractTopics(content + ' ' + fullText)
-      for (const tag of topics) {
-        await supabase.rpc('upsert_topic', { p_user_id: user.id, p_tag: tag })
-      }
-
-      await supabase
-        .from('conversations')
-        .update({ updated_at: new Date().toISOString() })
-        .eq('id', conversationId)
-
       controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
       controller.close()
     },
   })
 
   return new Response(readable, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    },
+    headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' },
   })
 }
