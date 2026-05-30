@@ -207,28 +207,33 @@ export default function AssessmentQuiz() {
       <div className="max-w-2xl mx-auto p-6 space-y-5">
 
         {/* Level badge */}
-        <div className="bg-white border border-sand-100 rounded-2xl p-6 text-center">
-          <div className="text-6xl mb-3">{LEVEL_EMOJIS[lv]}</div>
-          <div className={`inline-block ${LEVEL_COLORS[lv]} px-4 py-1.5 rounded-full text-sm font-bold mb-3`}>
+        <div className="bg-white border border-sand-100 rounded-3xl p-8 text-center animate-scale-in shadow-lg">
+          <div className="text-7xl mb-4 animate-float">{LEVEL_EMOJIS[lv]}</div>
+          <div className={`inline-block ${LEVEL_COLORS[lv]} px-5 py-1.5 rounded-full text-sm font-black mb-4 shadow-sm`}>
             Level {lv} / 10
           </div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">{result.title}</h2>
-          <p className="text-sm text-gray-600 leading-relaxed">{result.summary}</p>
+          <h2 className="text-3xl font-black text-gray-900 mb-3">{result.title}</h2>
+          <p className="text-sm text-gray-600 leading-relaxed max-w-sm mx-auto">{result.summary}</p>
         </div>
 
         {/* Level bar */}
-        <div className="bg-white border border-sand-100 rounded-xl p-5">
+        <div className="bg-white border border-sand-100 rounded-2xl p-5 animate-fade-up-2">
           <div className="flex justify-between text-xs text-gray-400 mb-2">
-            <span>입문 전</span>
-            <span>마스터</span>
+            <span>🌱 입문 전</span>
+            <span>👑 마스터</span>
           </div>
-          <div className="w-full bg-sand-100 rounded-full h-3 mb-3">
-            <div className="bg-sand h-3 rounded-full transition-all" style={{ width: `${lv * 10}%` }} />
+          <div className="w-full bg-sand-100 rounded-full h-4 mb-4 overflow-hidden">
+            <div
+              className="animate-shimmer h-4 rounded-full transition-all duration-1000"
+              style={{ width: `${lv * 10}%` }}
+            />
           </div>
-          <div className="grid grid-cols-10 gap-0.5">
+          <div className="grid grid-cols-10 gap-1">
             {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
               <div key={n}
-                className={`h-6 rounded text-xs font-bold flex items-center justify-center ${n <= lv ? 'bg-sand text-white' : 'bg-sand-50 text-sand-200'}`}>
+                className={`h-8 rounded-lg text-xs font-black flex items-center justify-center transition-all ${
+                  n <= lv ? 'bg-sand text-white shadow-sm' : 'bg-sand-50 text-sand-200'
+                } ${n === lv ? 'ring-2 ring-sand-400 scale-110' : ''}`}>
                 {n}
               </div>
             ))}
@@ -236,46 +241,50 @@ export default function AssessmentQuiz() {
         </div>
 
         {/* AI Feedback */}
-        <div className="bg-sand-50 border border-sand-200 rounded-xl p-5">
-          <h3 className="font-semibold text-gray-900 mb-2">💬 AI 피드백</h3>
+        <div className="bg-gradient-to-r from-sand-50 to-amber-50 border border-sand-200 rounded-2xl p-5 animate-fade-up-3">
+          <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span className="text-lg">💬</span> AI 피드백
+          </h3>
           <p className="text-sm text-gray-700 leading-relaxed">{result.feedback}</p>
         </div>
 
-        {/* Strengths */}
-        <div className="bg-white border border-sand-100 rounded-xl p-5">
-          <h3 className="font-semibold text-gray-900 mb-3">✅ 나의 강점</h3>
-          <ul className="space-y-2">
-            {result.strengths.map((s, i) => (
-              <li key={i} className="flex gap-2 text-sm text-gray-700">
-                <span className="text-forest shrink-0 mt-0.5">●</span>
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Growth areas */}
-        <div className="bg-white border border-sand-100 rounded-xl p-5">
-          <h3 className="font-semibold text-gray-900 mb-3">🌱 성장 포인트</h3>
-          <ul className="space-y-2">
-            {result.growthAreas.map((g, i) => (
-              <li key={i} className="flex gap-2 text-sm text-gray-700">
-                <span className="text-ocean shrink-0 mt-0.5">●</span>
-                {g}
-              </li>
-            ))}
-          </ul>
+        {/* Strengths & Growth */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-up-4">
+          <div className="bg-forest-50 border border-forest-200 rounded-2xl p-5">
+            <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <span>✅</span> 나의 강점
+            </h3>
+            <ul className="space-y-2">
+              {result.strengths.map((s, i) => (
+                <li key={i} className="flex gap-2 text-sm text-gray-700">
+                  <span className="text-forest-600 shrink-0 font-bold">›</span>{s}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-ocean-50 border border-ocean-100 rounded-2xl p-5">
+            <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <span>🌱</span> 성장 포인트
+            </h3>
+            <ul className="space-y-2">
+              {result.growthAreas.map((g, i) => (
+                <li key={i} className="flex gap-2 text-sm text-gray-700">
+                  <span className="text-ocean shrink-0 font-bold">›</span>{g}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Actions */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 animate-fade-up-4">
           <button
             onClick={() => { setStep('intro'); setCurrent(0); setAnswers(Array(QUESTIONS.length).fill('')); setResult(null) }}
-            className="border border-sand-200 text-sand-700 py-3 rounded-xl text-sm font-medium hover:bg-sand-50"
+            className="border border-sand-200 text-sand-700 py-3 rounded-xl text-sm font-semibold hover:bg-sand-50 transition-all"
           >
-            다시 테스트하기
+            🔄 다시 테스트하기
           </button>
-          <Link href="/chat" className="bg-sand text-white py-3 rounded-xl text-sm font-semibold text-center hover:bg-sand-700">
+          <Link href="/chat" className="bg-sand text-white py-3 rounded-xl text-sm font-semibold text-center hover:bg-sand-700 transition-all hover:scale-105 shadow-sm">
             AI 튜터와 학습하기 →
           </Link>
         </div>
