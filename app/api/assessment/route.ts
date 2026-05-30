@@ -1,4 +1,5 @@
 import { createOpenAIClient } from '@/lib/openai'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 const QUESTIONS = [
@@ -72,12 +73,33 @@ export async function POST(request: Request) {
   const level = Math.min(10, Math.max(1, Math.round(Number(raw.level) || 1)))
   const meta = LEVEL_DESCRIPTIONS[level]
 
-  return NextResponse.json({
+  const result = {
     level,
     title: meta.title,
     summary: meta.summary,
     strengths: raw.strengths || [],
     growthAreas: raw.growthAreas || [],
     feedback: raw.feedback || '',
-  })
+  }
+
+  // 로그인 사용자면 결과 저장
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      await supabase.from('assessments').insert({
+        user_id: user.id,
+        level,
+        title: meta.title,
+        summary: meta.summary,
+        strengths: result.strengths,
+        growth_areas: result.growthAreas,
+        feedback: result.feedback,
+      })
+    }
+  } catch {
+    // 저장 실패해도 결과는 반환
+  }
+
+  return NextResponse.json(result)
 }
