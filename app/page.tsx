@@ -60,7 +60,7 @@ export default async function HomePage() {
     <div className="min-h-screen bg-nomad-bg">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur border-b border-sand-100 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
-        <h1 className="font-bold text-gray-900">AI 학습 플랫폼</h1>
+        <h1 className="font-bold text-gray-900">루트 파인더</h1>
         <nav className="flex gap-4 text-sm">
           <Link href="/chat" className="text-sand hover:text-sand-700 font-medium transition-colors">AI 튜터</Link>
           <Link href="/assessment" className="text-gray-600 hover:text-sand transition-colors">레벨 테스트</Link>

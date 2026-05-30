@@ -63,7 +63,7 @@ export default function LoginPage() {
 
         <div className="relative z-10">
           <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-2xl mb-6">🧠</div>
-          <h1 className="text-3xl font-black mb-2">AI 학습 플랫폼</h1>
+          <h1 className="text-3xl font-black mb-2">루트 파인더</h1>
           <p className="text-sand-100 text-sm">디자인씽킹과 AI 활용을<br />함께 탐구합니다</p>
         </div>
 
@@ -81,7 +81,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10 text-xs text-sand-100 opacity-60">
-          © 2025 AI 학습 플랫폼
+          © 2025 루트 파인더
         </div>
       </div>
 
