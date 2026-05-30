@@ -1,18 +1,26 @@
 export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 export default async function HomePage() {
+  const cookieStore = await cookies()
+  const isDemo = cookieStore.get('demo-user')?.value === 'true'
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
 
-  const [{ data: conversations }, { data: topics }] = await Promise.all([
-    supabase.from('conversations').select('*').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(3),
-    supabase.from('topics').select('*').eq('user_id', user.id).order('count', { ascending: false }).limit(6),
-  ])
+  if (!user && !isDemo) redirect('/login')
+
+  const conversations = isDemo || !user ? [] : (
+    await supabase.from('conversations').select('*').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(3)
+  ).data ?? []
+
+  const topics = isDemo || !user ? [] : (
+    await supabase.from('topics').select('*').eq('user_id', user.id).order('count', { ascending: false }).limit(6)
+  ).data ?? []
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,6 +32,12 @@ export default async function HomePage() {
         </nav>
       </header>
       <main className="max-w-2xl mx-auto p-6 space-y-6">
+        {isDemo && (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
+            데모 모드입니다. 대화 이력이 저장되지 않습니다.
+          </div>
+        )}
+
         <div className="bg-indigo-600 text-white rounded-2xl p-6">
           <p className="text-indigo-200 text-sm mb-1">안녕하세요!</p>
           <h2 className="text-xl font-bold">오늘도 탐구를 시작해볼까요?</h2>
@@ -32,11 +46,11 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {conversations && conversations.length > 0 && (
+        {conversations.length > 0 && (
           <div>
             <h3 className="font-semibold text-gray-900 mb-3 text-sm">최근 대화</h3>
             <div className="space-y-2">
-              {conversations.map(conv => (
+              {conversations.map((conv: { id: string; title: string; updated_at: string }) => (
                 <Link key={conv.id} href={`/chat/${conv.id}`}
                   className="block p-3 bg-white border border-gray-200 rounded-xl hover:border-indigo-300 text-sm">
                   <span className="font-medium text-gray-900">{conv.title}</span>
@@ -47,7 +61,7 @@ export default async function HomePage() {
           </div>
         )}
 
-        {topics && topics.length > 0 && (
+        {topics.length > 0 && (
           <div>
             <h3 className="font-semibold text-gray-900 mb-3 text-sm">내가 탐구 중인 주제</h3>
             <div className="flex flex-wrap gap-2">
