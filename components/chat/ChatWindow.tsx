@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import MessageBubble from './MessageBubble'
 import ChatInput from './ChatInput'
 import type { Message } from '@/types'
@@ -11,12 +10,13 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
   const [streaming, setStreaming] = useState(false)
   const [streamingText, setStreamingText] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
-  const supabase = createClient()
 
   useEffect(() => {
-    supabase.from('messages').select('*').eq('conversation_id', conversationId)
-      .order('created_at', { ascending: true })
-      .then(({ data }) => { if (data) setMessages(data) })
+    // Load messages from API (handles both Supabase and demo mode)
+    fetch(`/api/messages?conversationId=${conversationId}`)
+      .then(r => r.ok ? r.json() : [])
+      .then(data => { if (Array.isArray(data)) setMessages(data) })
+      .catch(() => {})
   }, [conversationId])
 
   useEffect(() => {
@@ -35,7 +35,12 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
       body: JSON.stringify({ conversationId, content, messages }),
     })
 
-    const reader = res.body!.getReader()
+    if (!res.ok || !res.body) {
+      setStreaming(false)
+      return
+    }
+
+    const reader = res.body.getReader()
     const decoder = new TextDecoder()
     let full = ''
 
