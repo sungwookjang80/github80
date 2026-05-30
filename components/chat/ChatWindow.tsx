@@ -30,10 +30,29 @@ const POV_TEMPLATES = [
   },
 ]
 
+const STAGE_NEXT: Record<number, { label: string; prompt: string }> = {
+  1: {
+    label: '2단계: 문제 검증으로 →',
+    prompt: '[2단계: 문제 검증] 방금 완성한 POV를 바탕으로 이게 진짜 문제인지 함께 검증해주세요.',
+  },
+  2: {
+    label: '3단계: 아이디어 발산으로 →',
+    prompt: '[3단계: 아이디어 발산] 검증된 문제를 바탕으로 HMW 질문과 아이디어 발산을 시작해주세요.',
+  },
+}
+
+function detectCompletedStage(text: string): number | null {
+  if (/POV\s*완성|1단계.*완료|2단계.*넘어|문제 검증.*시작/.test(text)) return 1
+  if (/문제\s*검증\s*완료|2단계.*완료|3단계.*넘어|아이디에이션.*시작|아이디어\s*발산.*시작/.test(text)) return 2
+  if (/아이디에이션\s*완료|3단계.*완료|모든\s*단계.*완료/.test(text)) return 3
+  return null
+}
+
 export default function ChatWindow({ conversationId }: { conversationId: string }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [streaming, setStreaming] = useState(false)
   const [streamingText, setStreamingText] = useState('')
+  const [nextStage, setNextStage] = useState<number | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const searchParams = useSearchParams()
   const autoSent = useRef(false)
@@ -45,7 +64,6 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
       .catch(() => {})
   }, [conversationId])
 
-  // 예시 질문 자동 전송 (?q= 파라미터)
   useEffect(() => {
     const q = searchParams.get('q')
     if (q && !autoSent.current && messages.length === 0) {
@@ -59,7 +77,14 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
   }, [messages, streamingText])
 
   async function handleSend(content: string) {
-    const userMsg: Message = { id: crypto.randomUUID(), conversation_id: conversationId, role: 'user', content, created_at: new Date().toISOString() }
+    setNextStage(null)
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      conversation_id: conversationId,
+      role: 'user',
+      content,
+      created_at: new Date().toISOString(),
+    }
     setMessages(prev => [...prev, userMsg])
     setStreaming(true)
     setStreamingText('')
@@ -86,11 +111,25 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
         if (!line.startsWith('data: ')) continue
         const data = line.slice(6)
         if (data === '[DONE]') {
-          setMessages(prev => [...prev, { id: crypto.randomUUID(), conversation_id: conversationId, role: 'assistant', content: full, created_at: new Date().toISOString() }])
+          const aiMsg: Message = {
+            id: crypto.randomUUID(),
+            conversation_id: conversationId,
+            role: 'assistant',
+            content: full,
+            created_at: new Date().toISOString(),
+          }
+          setMessages(prev => [...prev, aiMsg])
           setStreamingText('')
           setStreaming(false)
+          // 단계 완성 감지
+          const completed = detectCompletedStage(full)
+          if (completed && completed < 3) setNextStage(completed)
         } else {
-          try { const { text } = JSON.parse(data); full += text; setStreamingText(full) } catch {}
+          try {
+            const { text } = JSON.parse(data)
+            full += text
+            setStreamingText(full)
+          } catch {}
         }
       }
     }
@@ -128,7 +167,9 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
             </div>
           </div>
         )}
+
         {messages.map(m => <MessageBubble key={m.id} message={m} />)}
+
         {streaming && streamingText && (
           <MessageBubble
             message={{ id: 'streaming', conversation_id: conversationId, role: 'assistant', content: streamingText, created_at: '' }}
@@ -147,6 +188,19 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
             </div>
           </div>
         )}
+
+        {/* 다음 단계 전환 버튼 */}
+        {nextStage && STAGE_NEXT[nextStage] && (
+          <div className="flex justify-center my-4 animate-fade-up">
+            <button
+              onClick={() => handleSend(STAGE_NEXT[nextStage!].prompt)}
+              className="flex items-center gap-2 bg-sand text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:bg-sand-700 transition-all hover:scale-105"
+            >
+              {STAGE_NEXT[nextStage].label}
+            </button>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
       <ChatInput onSend={handleSend} disabled={streaming} />
