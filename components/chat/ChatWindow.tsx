@@ -84,12 +84,20 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
         )}
         {messages.map(m => <MessageBubble key={m.id} message={m} />)}
         {streaming && streamingText && (
-          <MessageBubble message={{ id: 'streaming', conversation_id: conversationId, role: 'assistant', content: streamingText, created_at: '' }} />
+          <MessageBubble
+            message={{ id: 'streaming', conversation_id: conversationId, role: 'assistant', content: streamingText, created_at: '' }}
+            streaming
+          />
         )}
         {streaming && !streamingText && (
-          <div className="flex justify-start mb-4">
-            <div className="bg-white border border-sand-100 rounded-2xl rounded-bl-sm px-4 py-3 text-sm text-gray-400">
-              생각 중…
+          <div className="flex justify-start mb-4 bubble-in-left">
+            <div className="w-8 h-8 bg-sand rounded-full flex items-center justify-center text-white text-sm shrink-0 mr-2 mt-1 shadow-sm">
+              🧠
+            </div>
+            <div className="bg-white border border-sand-100 rounded-2xl rounded-bl-sm px-4 py-4 shadow-sm flex items-center gap-1.5">
+              <span className="w-2 h-2 bg-sand-400 rounded-full typing-dot" />
+              <span className="w-2 h-2 bg-sand-400 rounded-full typing-dot" />
+              <span className="w-2 h-2 bg-sand-400 rounded-full typing-dot" />
             </div>
           </div>
         )}
