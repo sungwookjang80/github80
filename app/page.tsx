@@ -60,6 +60,7 @@ export default async function HomePage() {
         <h1 className="font-bold text-gray-900">AI 학습 플랫폼</h1>
         <nav className="flex gap-4 text-sm">
           <Link href="/chat" className="text-sand hover:text-sand-700 font-medium">AI 튜터</Link>
+          <Link href="/assessment" className="text-gray-600 hover:text-gray-900">레벨 테스트</Link>
           <Link href="/profile" className="text-gray-600 hover:text-gray-900">내 학습</Link>
         </nav>
       </header>
