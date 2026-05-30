@@ -84,6 +84,8 @@ export default async function HomePage() {
               background: 'linear-gradient(135deg, #D4A373 0%, #c49060 40%, #b87d50 100%)',
             }}
           >
+            {/* Background pattern overlay */}
+            <div className="absolute inset-0 opacity-10 rounded-3xl overflow-hidden" style={{ backgroundImage: "url('/bg-pattern.svg')", backgroundSize: '60px 60px' }} />
             {/* Decorative blobs */}
             <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/10 rounded-full" />
             <div className="absolute -bottom-12 -left-6 w-32 h-32 bg-white/5 rounded-full" />

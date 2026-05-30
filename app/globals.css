@@ -5,6 +5,9 @@
 @layer base {
   body {
     background-color: #FFFDF7;
+    background-image: url('/bg-pattern.svg');
+    background-repeat: repeat;
+    background-size: 60px 60px;
   }
 }
 

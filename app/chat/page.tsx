@@ -32,9 +32,14 @@ export default function ChatListPage() {
       </header>
       <main className="max-w-2xl mx-auto p-6">
         {conversations.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
-            <p>아직 대화가 없습니다.</p>
-            <p className="text-sm mt-1">위 버튼을 눌러 첫 대화를 시작해보세요.</p>
+          <div className="text-center py-16 animate-fade-up">
+            <div className="text-6xl mb-4 animate-float">🧠</div>
+            <h2 className="text-lg font-bold text-gray-800 mb-2">첫 대화를 시작해볼까요?</h2>
+            <p className="text-sm text-gray-500 mb-6 leading-relaxed">디자인씽킹, AI 프롬프팅, 실무 적용 등<br />궁금한 것을 무엇이든 물어보세요.</p>
+            <button onClick={startNew}
+              className="inline-flex items-center gap-2 bg-sand text-white px-6 py-3 rounded-xl font-semibold hover:bg-sand-700 transition-all hover:scale-105 shadow-sm">
+              새 대화 시작하기 →
+            </button>
           </div>
         ) : (
           <div className="space-y-2">
