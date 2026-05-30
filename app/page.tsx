@@ -5,6 +5,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ExamplePrompts from '@/components/home/ExamplePrompts'
+import WorkflowCards from '@/components/home/WorkflowCards'
 
 const FEATURES = [
   {
@@ -176,6 +177,13 @@ export default async function HomePage() {
           <h3 className="text-xl font-black text-gray-900 mb-1">이런 질문을 해보세요</h3>
           <p className="text-sm text-gray-500 mb-5">클릭하면 바로 AI 튜터와 해당 주제로 대화를 시작합니다.</p>
           <ExamplePrompts />
+        </section>
+
+        {/* 문제 해결 워크플로우 */}
+        <section className="animate-fade-up-4">
+          <h3 className="text-xl font-black text-gray-900 mb-1">AI와 함께하는 문제 해결 3단계</h3>
+          <p className="text-sm text-gray-500 mb-5">클릭하면 바로 해당 단계의 AI 튜터 대화가 시작됩니다.</p>
+          <WorkflowCards />
         </section>
 
         {/* 레벨 테스트 배너 */}
