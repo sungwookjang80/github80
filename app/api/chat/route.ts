@@ -21,86 +21,94 @@ export async function POST(request: Request) {
 
   // Real Supabase mode: persist messages and extract topics
   if (!isDemo && hasSupabase && conversationId) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    try {
+      const supabase = await createClient()
+      const { data: { user } } = await supabase.auth.getUser()
 
-    if (user) {
-      // Save user message
-      await supabase.from('messages').insert({
-        conversation_id: conversationId,
-        role: 'user',
-        content: content.trim(),
-      })
+      if (user) {
+        // Save user message (best-effort)
+        await supabase.from('messages').insert({
+          conversation_id: conversationId,
+          role: 'user',
+          content: content.trim(),
+        })
 
-      // Load full history from DB
-      const { data: history } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true })
+        // Load full history from DB
+        const { data: history } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('conversation_id', conversationId)
+          .order('created_at', { ascending: true })
 
-      const historyMessages = (history || []).slice(-20).map(m => ({
-        role: m.role as 'user' | 'assistant',
-        content: m.content,
-      }))
+        // Build history — ensure current user message is always included
+        const historyMessages = (history || []).slice(-20).map(m => ({
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+        }))
+        const lastMsg = historyMessages[historyMessages.length - 1]
+        if (!lastMsg || lastMsg.role !== 'user' || lastMsg.content !== content.trim()) {
+          historyMessages.push({ role: 'user', content: content.trim() })
+        }
 
-      const openai = createOpenAIClient()
-      const stream = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        stream: true,
-        messages: [{ role: 'system', content: TUTOR_SYSTEM_PROMPT }, ...historyMessages],
-      })
+        const openai = createOpenAIClient()
+        const stream = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          stream: true,
+          messages: [{ role: 'system', content: TUTOR_SYSTEM_PROMPT }, ...historyMessages],
+        })
 
-      const encoder = new TextEncoder()
-      const readable = new ReadableStream({
-        async start(controller) {
-          let fullText = ''
-          for await (const chunk of stream) {
-            const text = chunk.choices[0]?.delta?.content || ''
-            if (text) {
-              fullText += text
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
+        const encoder = new TextEncoder()
+        const readable = new ReadableStream({
+          async start(controller) {
+            let fullText = ''
+            for await (const chunk of stream) {
+              const text = chunk.choices[0]?.delta?.content || ''
+              if (text) {
+                fullText += text
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
+              }
             }
-          }
 
-          // Save AI response
-          await supabase.from('messages').insert({
-            conversation_id: conversationId,
-            role: 'assistant',
-            content: fullText,
-          })
+            // Save AI response (best-effort)
+            await supabase.from('messages').insert({
+              conversation_id: conversationId,
+              role: 'assistant',
+              content: fullText,
+            }).catch(() => {})
 
-          // Extract and upsert topics
-          const topics = extractTopics(content + ' ' + fullText)
-          for (const tag of topics) {
-            const { data: existing } = await supabase
-              .from('topics')
-              .select('count')
-              .eq('user_id', user.id)
-              .eq('tag', tag)
-              .single()
-            if (existing) {
-              await supabase.from('topics')
-                .update({ count: existing.count + 1, last_seen_at: new Date().toISOString() })
-                .eq('user_id', user.id).eq('tag', tag)
-            } else {
-              await supabase.from('topics').insert({ user_id: user.id, tag, count: 1, last_seen_at: new Date().toISOString() })
-            }
-          }
+            // Extract and upsert topics (best-effort)
+            try {
+              const topics = extractTopics(content + ' ' + fullText)
+              for (const tag of topics) {
+                const { data: existing } = await supabase
+                  .from('topics').select('count')
+                  .eq('user_id', user.id).eq('tag', tag).single()
+                if (existing) {
+                  await supabase.from('topics')
+                    .update({ count: existing.count + 1, last_seen_at: new Date().toISOString() })
+                    .eq('user_id', user.id).eq('tag', tag)
+                } else {
+                  await supabase.from('topics')
+                    .insert({ user_id: user.id, tag, count: 1, last_seen_at: new Date().toISOString() })
+                }
+              }
+              await supabase.from('conversations')
+                .update({ updated_at: new Date().toISOString() })
+                .eq('id', conversationId)
+            } catch { /* best-effort */ }
 
-          // Update conversation timestamp
-          await supabase.from('conversations')
-            .update({ updated_at: new Date().toISOString() })
-            .eq('id', conversationId)
+            controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
+            controller.close()
+          },
+        })
 
-          controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
-          controller.close()
-        },
-      })
-
-      return new Response(readable, {
-        headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' },
-      })
+        return new Response(readable, {
+          headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' },
+        })
+      }
+    } catch (e) {
+      console.error('[Chat] Supabase error, falling back to stateless mode:', e)
+      // fall through to stateless mode below
     }
   }
 
