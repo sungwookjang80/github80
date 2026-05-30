@@ -1,0 +1,45 @@
+<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Shadow under AI bubble -->
+  <ellipse cx="95" cy="82" rx="55" ry="6" fill="#D4A373" fill-opacity="0.1"/>
+  <!-- AI speech bubble -->
+  <rect x="20" y="18" width="130" height="60" rx="18" fill="#D4A373" fill-opacity="0.12"/>
+  <rect x="20" y="18" width="130" height="60" rx="18" stroke="#D4A373" stroke-opacity="0.3" stroke-width="1.5"/>
+  <!-- Bubble tail -->
+  <path d="M35 78 L22 96 L52 78Z" fill="#D4A373" fill-opacity="0.12"/>
+  <path d="M35 78 L22 96 L52 78Z" stroke="#D4A373" stroke-opacity="0.2" stroke-width="1"/>
+
+  <!-- AI avatar circle inside bubble -->
+  <circle cx="52" cy="48" r="18" fill="#D4A373" fill-opacity="0.18"/>
+  <circle cx="52" cy="48" r="11" fill="#D4A373" fill-opacity="0.28"/>
+  <!-- Brain paths (simplified) -->
+  <path d="M46 45 C46 41 48.5 39 51 39 C53.5 39 56 41 56 44 C57.5 44 59 45.5 59 47.5 C59 50 57.5 52 56 52 L46 52 C44.5 52 43 50 43 47.5 C43 45.5 44.5 44 46 44Z" fill="#D4A373" fill-opacity="0.6"/>
+  <line x1="51" y1="44" x2="51" y2="52" stroke="white" stroke-opacity="0.5" stroke-width="1"/>
+  <line x1="46" y1="47" x2="56" y2="47" stroke="white" stroke-opacity="0.4" stroke-width="0.8"/>
+
+  <!-- Text lines in AI bubble -->
+  <rect x="78" y="32" width="56" height="5" rx="2.5" fill="#D4A373" fill-opacity="0.4"/>
+  <rect x="78" y="42" width="44" height="5" rx="2.5" fill="#D4A373" fill-opacity="0.3"/>
+  <rect x="78" y="52" width="50" height="5" rx="2.5" fill="#D4A373" fill-opacity="0.22"/>
+  <rect x="78" y="62" width="36" height="5" rx="2.5" fill="#D4A373" fill-opacity="0.16"/>
+
+  <!-- Shadow under user bubble -->
+  <ellipse cx="155" cy="158" rx="48" ry="5" fill="#D4A373" fill-opacity="0.15"/>
+  <!-- User speech bubble -->
+  <rect x="90" y="108" width="130" height="46" rx="16" fill="#D4A373" fill-opacity="0.75"/>
+  <!-- Bubble tail -->
+  <path d="M205 154 L220 168 L192 154Z" fill="#D4A373" fill-opacity="0.75"/>
+
+  <!-- Text lines in user bubble -->
+  <rect x="106" y="120" width="70" height="5" rx="2.5" fill="white" fill-opacity="0.75"/>
+  <rect x="106" y="131" width="50" height="5" rx="2.5" fill="white" fill-opacity="0.55"/>
+  <rect x="106" y="142" width="60" height="5" rx="2.5" fill="white" fill-opacity="0.4"/>
+
+  <!-- Sparkle / dot decorations -->
+  <circle cx="15" cy="110" r="4" fill="#D4A373" fill-opacity="0.2"/>
+  <circle cx="225" cy="40" r="3" fill="#D4A373" fill-opacity="0.2"/>
+  <circle cx="220" cy="88" r="2" fill="#D4A373" fill-opacity="0.15"/>
+  <circle cx="12" cy="65" r="2" fill="#D4A373" fill-opacity="0.12"/>
+
+  <!-- Small star -->
+  <path d="M200 22 L201.5 27 L207 27 L202.5 30 L204 35 L200 32 L196 35 L197.5 30 L193 27 L198.5 27Z" fill="#D4A373" fill-opacity="0.25"/>
+</svg>

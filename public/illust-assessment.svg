@@ -1,0 +1,51 @@
+<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Soft background glow -->
+  <circle cx="120" cy="90" r="80" fill="#D4A373" fill-opacity="0.05"/>
+
+  <!-- Level bars (10 bars, bar 7 highlighted as example) -->
+  <!-- Bar 1 -->
+  <rect x="14" y="148" width="16" height="16" rx="3" fill="#D4A373" fill-opacity="0.12"/>
+  <!-- Bar 2 -->
+  <rect x="34" y="138" width="16" height="26" rx="3" fill="#D4A373" fill-opacity="0.16"/>
+  <!-- Bar 3 -->
+  <rect x="54" y="126" width="16" height="38" rx="3" fill="#D4A373" fill-opacity="0.22"/>
+  <!-- Bar 4 -->
+  <rect x="74" y="114" width="16" height="50" rx="3" fill="#D4A373" fill-opacity="0.28"/>
+  <!-- Bar 5 -->
+  <rect x="94" y="100" width="16" height="64" rx="3" fill="#D4A373" fill-opacity="0.38"/>
+  <!-- Bar 6 -->
+  <rect x="114" y="86" width="16" height="78" rx="3" fill="#D4A373" fill-opacity="0.5"/>
+  <!-- Bar 7 - highlighted current level -->
+  <rect x="134" y="68" width="16" height="96" rx="3" fill="#D4A373" fill-opacity="0.85"/>
+  <rect x="134" y="68" width="16" height="96" rx="3" stroke="#D4A373" stroke-width="1.5" stroke-opacity="0.6"/>
+  <!-- Bar 8 -->
+  <rect x="154" y="80" width="16" height="84" rx="3" fill="#D4A373" fill-opacity="0.18"/>
+  <!-- Bar 9 -->
+  <rect x="174" y="95" width="16" height="69" rx="3" fill="#D4A373" fill-opacity="0.12"/>
+  <!-- Bar 10 -->
+  <rect x="194" y="112" width="16" height="52" rx="3" fill="#D4A373" fill-opacity="0.08"/>
+
+  <!-- Trophy on top of bar 7 -->
+  <circle cx="142" cy="50" r="20" fill="#D4A373" fill-opacity="0.12"/>
+  <circle cx="142" cy="50" r="13" fill="#D4A373" fill-opacity="0.18"/>
+  <!-- Trophy cup -->
+  <path d="M133 44 C133 39 137 36 142 36 C147 36 151 39 151 44 L149 54 L135 54Z" fill="#D4A373" fill-opacity="0.6"/>
+  <rect x="139" y="54" width="6" height="6" rx="1" fill="#D4A373" fill-opacity="0.5"/>
+  <rect x="135" y="60" width="14" height="3" rx="1.5" fill="#D4A373" fill-opacity="0.5"/>
+  <!-- Trophy handles -->
+  <path d="M133 44 C129 44 127 47 128 50 C129 53 131 54 133 54" stroke="#D4A373" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M151 44 C155 44 157 47 156 50 C155 53 153 54 151 54" stroke="#D4A373" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Shine on trophy -->
+  <path d="M137 40 C138 38 140 37 142 37" stroke="white" stroke-opacity="0.5" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Stars scattered -->
+  <path d="M24 52 L25.5 57 L31 57 L26.5 60 L28 65 L24 62 L20 65 L21.5 60 L17 57 L22.5 57Z" fill="#D4A373" fill-opacity="0.28"/>
+  <path d="M200 28 L201 32 L205 32 L202 34.5 L203 38.5 L200 36 L197 38.5 L198 34.5 L195 32 L199 32Z" fill="#D4A373" fill-opacity="0.22"/>
+  <path d="M218 76 L219 79 L222 79 L220 81 L221 84 L218 82 L215 84 L216 81 L214 79 L217 79Z" fill="#D4A373" fill-opacity="0.18"/>
+  <circle cx="16" cy="100" r="3" fill="#D4A373" fill-opacity="0.18"/>
+  <circle cx="225" cy="52" r="2" fill="#D4A373" fill-opacity="0.15"/>
+
+  <!-- Level number badge above bar 7 -->
+  <rect x="130" y="60" width="24" height="14" rx="7" fill="#D4A373" fill-opacity="0.9"/>
+  <text x="142" y="71" text-anchor="middle" font-size="8" font-family="sans-serif" font-weight="700" fill="white">Lv.7</text>
+</svg>

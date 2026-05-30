@@ -1,0 +1,90 @@
+<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Outer dashed ring -->
+  <circle cx="160" cy="120" r="105" stroke="white" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="5 5"/>
+  <!-- Middle ring -->
+  <circle cx="160" cy="120" r="72" stroke="white" stroke-opacity="0.13" stroke-width="1"/>
+  <!-- Center hub -->
+  <circle cx="160" cy="120" r="42" fill="white" fill-opacity="0.1"/>
+  <circle cx="160" cy="120" r="28" fill="white" fill-opacity="0.13"/>
+  <circle cx="160" cy="120" r="16" fill="white" fill-opacity="0.2"/>
+
+  <!-- Connection lines -->
+  <line x1="160" y1="92" x2="160" y2="50" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="186" y1="101" x2="218" y2="73" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="200" y1="120" x2="240" y2="120" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="184" y1="144" x2="212" y2="170" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="136" y1="144" x2="108" y2="170" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="120" y1="120" x2="80" y2="120" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+  <line x1="134" y1="101" x2="102" y2="73" stroke="white" stroke-opacity="0.22" stroke-width="1.5"/>
+
+  <!-- Satellite nodes -->
+  <!-- Top: idea/lightbulb -->
+  <circle cx="160" cy="40" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="160" cy="40" r="9" fill="white" fill-opacity="0.22"/>
+  <path d="M155 37 C155 33 158 30 161 30 C164 30 167 33 167 37 C169 38 170 40 170 42 C170 45 168 47 166 47 L154 47 C152 47 150 45 150 42 C150 40 152 38 155 37Z" fill="white" fill-opacity="0.45"/>
+  <line x1="156" y1="49" x2="164" y2="49" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="157" y1="52" x2="163" y2="52" stroke="white" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Top-right: chat -->
+  <circle cx="228" cy="63" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="228" cy="63" r="9" fill="white" fill-opacity="0.22"/>
+  <rect x="220" y="56" width="16" height="11" rx="4" fill="white" fill-opacity="0.4"/>
+  <circle cx="224" cy="61" r="1.5" fill="white" fill-opacity="0.7"/>
+  <circle cx="228" cy="61" r="1.5" fill="white" fill-opacity="0.7"/>
+  <circle cx="232" cy="61" r="1.5" fill="white" fill-opacity="0.7"/>
+  <path d="M222 67 L219 72 L226 67Z" fill="white" fill-opacity="0.3"/>
+
+  <!-- Right: chart -->
+  <circle cx="253" cy="120" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="253" cy="120" r="9" fill="white" fill-opacity="0.22"/>
+  <rect x="245" y="124" width="5" height="8" rx="1" fill="white" fill-opacity="0.35"/>
+  <rect x="251" y="119" width="5" height="13" rx="1" fill="white" fill-opacity="0.45"/>
+  <rect x="257" y="114" width="5" height="18" rx="1" fill="white" fill-opacity="0.6"/>
+
+  <!-- Bottom-right: star/trophy -->
+  <circle cx="222" cy="178" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="222" cy="178" r="9" fill="white" fill-opacity="0.22"/>
+  <path d="M222 170 L224 175 L230 175 L225 179 L227 184 L222 181 L217 184 L219 179 L214 175 L220 175Z" fill="white" fill-opacity="0.5"/>
+
+  <!-- Bottom-left: book/learn -->
+  <circle cx="98" cy="178" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="98" cy="178" r="9" fill="white" fill-opacity="0.22"/>
+  <rect x="90" y="172" width="16" height="12" rx="2" fill="white" fill-opacity="0.3"/>
+  <line x1="94" y1="175" x2="102" y2="175" stroke="white" stroke-opacity="0.55" stroke-width="1.2"/>
+  <line x1="94" y1="178" x2="102" y2="178" stroke="white" stroke-opacity="0.45" stroke-width="1.2"/>
+  <line x1="94" y1="181" x2="100" y2="181" stroke="white" stroke-opacity="0.35" stroke-width="1.2"/>
+
+  <!-- Left: person/user -->
+  <circle cx="67" cy="120" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="67" cy="120" r="9" fill="white" fill-opacity="0.22"/>
+  <circle cx="67" cy="115" r="5" fill="white" fill-opacity="0.4"/>
+  <path d="M59 128 C59 123 63 120 67 120 C71 120 75 123 75 128" stroke="white" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Top-left: AI chip -->
+  <circle cx="92" cy="63" r="16" fill="white" fill-opacity="0.15"/>
+  <circle cx="92" cy="63" r="9" fill="white" fill-opacity="0.22"/>
+  <rect x="85" y="56" width="14" height="14" rx="3" fill="white" fill-opacity="0.35"/>
+  <line x1="88" y1="56" x2="88" y2="53" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="92" y1="56" x2="92" y2="53" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="96" y1="56" x2="96" y2="53" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="88" y1="70" x2="88" y2="73" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="92" y1="70" x2="92" y2="73" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+  <line x1="96" y1="70" x2="96" y2="73" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+
+  <!-- Flow dots on lines -->
+  <circle cx="160" cy="71" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="204" cy="88" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="226" cy="120" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="198" cy="152" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="122" cy="152" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="94" cy="120" r="2.5" fill="white" fill-opacity="0.55"/>
+  <circle cx="116" cy="88" r="2.5" fill="white" fill-opacity="0.55"/>
+
+  <!-- Corner sparkles -->
+  <circle cx="38" cy="38" r="3" fill="white" fill-opacity="0.2"/>
+  <circle cx="282" cy="38" r="2" fill="white" fill-opacity="0.15"/>
+  <circle cx="40" cy="195" r="2" fill="white" fill-opacity="0.15"/>
+  <circle cx="280" cy="195" r="3" fill="white" fill-opacity="0.2"/>
+  <circle cx="30" cy="115" r="1.5" fill="white" fill-opacity="0.2"/>
+  <circle cx="290" cy="115" r="1.5" fill="white" fill-opacity="0.2"/>
+</svg>

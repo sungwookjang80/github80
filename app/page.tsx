@@ -90,10 +90,15 @@ export default async function HomePage() {
             <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/10 rounded-full" />
             <div className="absolute -bottom-12 -left-6 w-32 h-32 bg-white/5 rounded-full" />
 
+            {/* Hero illustration */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illust-hero.svg" alt="" aria-hidden="true"
+              className="absolute right-0 top-0 h-full w-56 object-cover opacity-70 pointer-events-none select-none" />
+
             {/* Floating icons */}
-            <div className="absolute top-6 right-16 text-4xl animate-float opacity-80">🧭</div>
-            <div className="absolute top-16 right-6 text-2xl animate-float-delay opacity-60">💡</div>
-            <div className="absolute bottom-6 right-10 text-3xl animate-float-slow opacity-70">✨</div>
+            <div className="absolute top-6 right-16 text-3xl animate-float opacity-70">🧭</div>
+            <div className="absolute top-16 right-6 text-xl animate-float-delay opacity-50">💡</div>
+            <div className="absolute bottom-6 right-10 text-2xl animate-float-slow opacity-60">✨</div>
 
             <div className="relative z-10">
               <span className="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
@@ -175,14 +180,17 @@ export default async function HomePage() {
 
         {/* 레벨 테스트 배너 */}
         <section className="animate-fade-up-4">
-          <div className="bg-white border border-sand-100 rounded-2xl p-6 flex gap-4 items-center card-hover">
-            <div className="text-5xl animate-float-slow shrink-0">🎯</div>
-            <div className="flex-1">
+          <div className="bg-white border border-sand-100 rounded-2xl p-6 flex gap-4 items-center card-hover overflow-hidden relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illust-assessment.svg" alt="" aria-hidden="true"
+              className="absolute right-24 top-0 h-full w-28 object-cover opacity-15 pointer-events-none select-none" />
+            <div className="text-5xl animate-float-slow shrink-0 relative z-10">🎯</div>
+            <div className="flex-1 relative z-10">
               <p className="font-bold text-gray-900 mb-1">내 디자인씽킹 레벨은 몇 단계일까요?</p>
               <p className="text-sm text-gray-500">6가지 질문에 답하면 AI가 10단계로 분석해드립니다.</p>
             </div>
             <Link href="/assessment"
-              className="shrink-0 bg-sand text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-sand-700 transition-all hover:scale-105">
+              className="shrink-0 bg-sand text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-sand-700 transition-all hover:scale-105 relative z-10">
               테스트하기
             </Link>
           </div>

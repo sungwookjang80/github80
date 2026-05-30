@@ -51,11 +51,15 @@ export default function LoginPage() {
         {/* Background pattern overlay */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url('/bg-pattern.svg')", backgroundSize: '60px 60px' }} />
 
+        {/* Hero illustration */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/illust-hero.svg" alt="" aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none select-none" />
+
         {/* Floating decorative emojis */}
-        <div className="absolute top-16 right-20 text-6xl animate-float opacity-70">🧭</div>
-        <div className="absolute top-36 right-8 text-4xl animate-float-delay opacity-50">💡</div>
-        <div className="absolute bottom-32 right-16 text-5xl animate-float-slow opacity-60">✨</div>
-        <div className="absolute top-1/2 left-8 text-3xl animate-float opacity-40">🎨</div>
+        <div className="absolute top-16 right-20 text-5xl animate-float opacity-60">🧭</div>
+        <div className="absolute top-36 right-8 text-3xl animate-float-delay opacity-45">💡</div>
+        <div className="absolute bottom-32 right-16 text-4xl animate-float-slow opacity-50">✨</div>
 
         <div className="relative z-10">
           <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-2xl mb-6">🧠</div>

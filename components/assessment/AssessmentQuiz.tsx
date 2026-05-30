@@ -86,13 +86,17 @@ export default function AssessmentQuiz() {
   if (step === 'intro') return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
       <div className="bg-sand rounded-2xl p-6 text-white relative overflow-hidden">
-        <div className="absolute right-2 top-2 opacity-10 text-[80px] leading-none select-none">🎯</div>
-        <p className="text-sand-100 text-sm mb-1">나의 역량 파악</p>
-        <h2 className="text-2xl font-bold mb-2">디자인씽킹 레벨 테스트</h2>
-        <p className="text-sand-100 text-sm leading-relaxed">
-          6가지 질문에 자유롭게 답하면, AI가 당신의 디자인씽킹 수준을 10단계로 분석해드립니다.
-          정답이 없어요. 솔직하게 답할수록 정확한 결과가 나옵니다.
-        </p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/illust-assessment.svg" alt="" aria-hidden="true"
+          className="absolute right-0 bottom-0 h-full w-40 object-cover opacity-40 pointer-events-none select-none" />
+        <div className="relative z-10">
+          <p className="text-sand-100 text-sm mb-1">나의 역량 파악</p>
+          <h2 className="text-2xl font-bold mb-2">디자인씽킹 레벨 테스트</h2>
+          <p className="text-sand-100 text-sm leading-relaxed max-w-xs">
+            6가지 질문에 자유롭게 답하면, AI가 당신의 디자인씽킹 수준을 10단계로 분석해드립니다.
+            정답이 없어요. 솔직하게 답할수록 정확한 결과가 나옵니다.
+          </p>
+        </div>
       </div>
 
       <div className="bg-white border border-sand-100 rounded-xl p-5 space-y-3">
