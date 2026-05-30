@@ -76,7 +76,7 @@ export default async function ProfilePage() {
       <header className="bg-white border-b border-sand-100 px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-gray-500 hover:text-gray-900 text-sm">← 홈</Link>
         <h1 className="font-bold text-gray-900">내 학습 현황</h1>
-        {user ? <LogoutButton /> : <div />}
+        {(user || isDemo) ? <LogoutButton isDemo={isDemo} /> : <div />}
       </header>
 
       <main className="max-w-2xl mx-auto p-6 space-y-5">
