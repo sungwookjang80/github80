@@ -1,17 +1,21 @@
 import { google } from 'googleapis'
 
-const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID!
+const SPREADSHEET_ID = '1S3bVyDwAwRFjiQifVG8iJcZ3epZJqSQg1xj-aNKJ-ZY'
 
 export async function appendUserToSheet(name: string, email: string) {
-  const key = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
-  if (!key || !SPREADSHEET_ID) return
+  const clientId = process.env.GOOGLE_CLIENT_ID
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: JSON.parse(key),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  })
+  if (!clientId || !clientSecret || !refreshToken) {
+    console.warn('[Sheets] 환경변수 미설정, 건너뜀')
+    return
+  }
 
-  const sheets = google.sheets({ version: 'v4', auth })
+  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, 'urn:ietf:wg:oauth:2.0:oob')
+  oauth2Client.setCredentials({ refresh_token: refreshToken })
+
+  const sheets = google.sheets({ version: 'v4', auth: oauth2Client })
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
