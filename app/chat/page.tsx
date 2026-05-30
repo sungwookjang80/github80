@@ -10,7 +10,9 @@ export default function ChatListPage() {
   const router = useRouter()
 
   useEffect(() => {
-    fetch('/api/conversations').then(r => r.json()).then(setConversations)
+    fetch('/api/conversations')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => { if (Array.isArray(data)) setConversations(data) })
   }, [])
 
   async function startNew() {
@@ -20,11 +22,11 @@ export default function ChatListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-nomad-bg">
+      <header className="bg-white border-b border-sand-100 px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-gray-500 hover:text-gray-900 text-sm">← 홈</Link>
         <h1 className="font-bold text-gray-900">AI 튜터</h1>
-        <button onClick={startNew} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">
+        <button onClick={startNew} className="bg-sand text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sand-700">
           새 대화
         </button>
       </header>
@@ -38,7 +40,7 @@ export default function ChatListPage() {
           <div className="space-y-2">
             {conversations.map(conv => (
               <Link key={conv.id} href={`/chat/${conv.id}`}
-                className="block p-4 bg-white border border-gray-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+                className="block p-4 bg-white border border-sand-100 rounded-xl hover:border-sand-300 hover:bg-sand-50 transition-colors">
                 <p className="font-medium text-gray-900 text-sm">{conv.title}</p>
                 <p className="text-xs text-gray-400 mt-1">{new Date(conv.updated_at).toLocaleDateString('ko-KR')}</p>
               </Link>

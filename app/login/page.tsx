@@ -42,30 +42,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-xl shadow-sm w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-nomad-bg">
+      <div className="bg-white p-8 rounded-xl shadow-sm w-full max-w-md border border-sand-100">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">AI 학습 플랫폼</h1>
         <p className="text-gray-500 mb-6 text-sm">디자인씽킹과 AI 활용을 탐구하세요</p>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sand"
               placeholder="you@company.com" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sand"
               placeholder="••••••••" />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button onClick={handleLogin} disabled={loading}
-            className="w-full bg-indigo-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-indigo-700 disabled:opacity-50">
+            className="w-full bg-sand text-white rounded-lg py-2 text-sm font-medium hover:bg-sand-700 disabled:opacity-50">
             {loading ? '처리 중...' : '로그인'}
           </button>
           <button onClick={handleSignUp} disabled={loading}
-            className="w-full border border-gray-300 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50">
+            className="w-full border border-gray-300 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-sand-50 disabled:opacity-50">
             회원가입
           </button>
           <div className="relative my-2">
@@ -73,7 +73,7 @@ export default function LoginPage() {
             <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">또는</span></div>
           </div>
           <button onClick={handleDemoStart} disabled={loading}
-            className="w-full bg-emerald-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-emerald-600 disabled:opacity-50">
+            className="w-full bg-forest text-white rounded-lg py-2 text-sm font-medium hover:bg-forest-700 disabled:opacity-50">
             데모로 시작하기 (Supabase 없이 체험)
           </button>
         </div>

@@ -27,8 +27,8 @@ export default async function ProfilePage() {
   ).count ?? 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-nomad-bg">
+      <header className="bg-white border-b border-sand-100 px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-gray-500 hover:text-gray-900 text-sm">← 홈</Link>
         <h1 className="font-bold text-gray-900">내 학습 현황</h1>
         <div />
@@ -41,17 +41,17 @@ export default async function ProfilePage() {
         )}
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-            <p className="text-3xl font-bold text-indigo-600">{convCount}</p>
+          <div className="bg-white border border-sand-100 rounded-xl p-4 text-center">
+            <p className="text-3xl font-bold text-sand">{convCount}</p>
             <p className="text-sm text-gray-500 mt-1">총 대화 수</p>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-            <p className="text-3xl font-bold text-indigo-600">{msgCount}</p>
+          <div className="bg-white border border-sand-100 rounded-xl p-4 text-center">
+            <p className="text-3xl font-bold text-sand">{msgCount}</p>
             <p className="text-sm text-gray-500 mt-1">보낸 메시지</p>
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
+        <div className="bg-white border border-sand-100 rounded-xl p-5">
           <h3 className="font-semibold text-gray-900 mb-4">탐구한 주제</h3>
           {topics.length > 0 ? (
             <div className="space-y-3">
@@ -59,8 +59,8 @@ export default async function ProfilePage() {
                 <div key={topic.id} className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-800">{topic.tag}</span>
                   <div className="flex items-center gap-3">
-                    <div className="w-32 bg-gray-100 rounded-full h-2">
-                      <div className="bg-indigo-500 h-2 rounded-full"
+                    <div className="w-32 bg-sand-100 rounded-full h-2">
+                      <div className="bg-sand h-2 rounded-full"
                         style={{ width: `${Math.min((topic.count / (topics[0]?.count || 1)) * 100, 100)}%` }} />
                     </div>
                     <span className="text-xs text-gray-400 w-8 text-right">{topic.count}회</span>
@@ -73,7 +73,7 @@ export default async function ProfilePage() {
           )}
         </div>
 
-        <Link href="/chat" className="block text-center bg-indigo-600 text-white rounded-xl py-3 text-sm font-medium hover:bg-indigo-700">
+        <Link href="/chat" className="block text-center bg-sand text-white rounded-xl py-3 text-sm font-medium hover:bg-sand-700">
           AI 튜터와 대화 계속하기
         </Link>
       </main>
