@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ExamplePrompts from '@/components/home/ExamplePrompts'
 import WorkflowCards from '@/components/home/WorkflowCards'
+import LogoutButton from '@/components/profile/LogoutButton'
 
 const FEATURES = [
   {
@@ -62,18 +63,20 @@ export default async function HomePage() {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur border-b border-sand-100 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
         <h1 className="font-bold text-gray-900">루트 파인더</h1>
-        <nav className="flex gap-4 text-sm">
+        <nav className="flex items-center gap-4 text-sm">
           <Link href="/chat" className="text-sand hover:text-sand-700 font-medium transition-colors">AI 튜터</Link>
           <Link href="/assessment" className="text-gray-600 hover:text-sand transition-colors">레벨 테스트</Link>
           <Link href="/profile" className="text-gray-600 hover:text-gray-900 transition-colors">내 학습</Link>
+          <LogoutButton isDemo={isDemo} />
         </nav>
       </header>
 
       <main className="max-w-2xl mx-auto p-6 space-y-12">
 
         {isDemo && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 animate-fade-up">
-            데모 모드입니다. 대화 이력이 저장되지 않습니다.
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 flex items-center justify-between animate-fade-up">
+            <span>데모 모드입니다. 대화 이력이 저장되지 않습니다.</span>
+            <LogoutButton isDemo={isDemo} />
           </div>
         )}
 
