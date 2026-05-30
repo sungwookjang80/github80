@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import MessageBubble from './MessageBubble'
 import ChatInput from './ChatInput'
 import type { Message } from '@/types'
@@ -10,14 +11,24 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
   const [streaming, setStreaming] = useState(false)
   const [streamingText, setStreamingText] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const searchParams = useSearchParams()
+  const autoSent = useRef(false)
 
   useEffect(() => {
-    // Load messages from API (handles both Supabase and demo mode)
     fetch(`/api/messages?conversationId=${conversationId}`)
       .then(r => r.ok ? r.json() : [])
       .then(data => { if (Array.isArray(data)) setMessages(data) })
       .catch(() => {})
   }, [conversationId])
+
+  // 예시 질문 자동 전송 (?q= 파라미터)
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q && !autoSent.current && messages.length === 0) {
+      autoSent.current = true
+      handleSend(q)
+    }
+  }, [messages])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -63,16 +74,24 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-4 bg-nomad-bg">
         {messages.length === 0 && (
           <div className="text-center text-gray-400 mt-16">
-            <p className="text-lg font-medium">AI 튜터와 대화를 시작하세요</p>
-            <p className="text-sm mt-2">디자인씽킹, AI 활용에 대해 무엇이든 물어보세요</p>
+            <p className="text-2xl mb-3">🧠</p>
+            <p className="text-lg font-medium text-gray-700">AI 튜터와 대화를 시작하세요</p>
+            <p className="text-sm mt-2 text-gray-400">디자인씽킹, AI 활용에 대해 무엇이든 물어보세요</p>
           </div>
         )}
         {messages.map(m => <MessageBubble key={m.id} message={m} />)}
         {streaming && streamingText && (
           <MessageBubble message={{ id: 'streaming', conversation_id: conversationId, role: 'assistant', content: streamingText, created_at: '' }} />
+        )}
+        {streaming && !streamingText && (
+          <div className="flex justify-start mb-4">
+            <div className="bg-white border border-sand-100 rounded-2xl rounded-bl-sm px-4 py-3 text-sm text-gray-400">
+              생각 중…
+            </div>
+          </div>
         )}
         <div ref={bottomRef} />
       </div>

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import ChatWindow from '@/components/chat/ChatWindow'
 import Link from 'next/link'
 
@@ -11,7 +12,9 @@ export default async function ChatPage({ params }: { params: Promise<{ id: strin
         <Link href="/" className="text-gray-500 hover:text-gray-900 text-sm">홈</Link>
       </header>
       <div className="flex-1 overflow-hidden">
-        <ChatWindow conversationId={id} />
+        <Suspense>
+          <ChatWindow conversationId={id} />
+        </Suspense>
       </div>
     </div>
   )
